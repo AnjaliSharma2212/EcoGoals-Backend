@@ -34,5 +34,13 @@
     "@types/node": "^24.3.0",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.9.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AnjaliSharma2212/EcoGoals-Backend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AnjaliSharma2212/EcoGoals-Backend/issues"
+  },
+  "homepage": "https://github.com/AnjaliSharma2212/EcoGoals-Backend#readme"
 }
