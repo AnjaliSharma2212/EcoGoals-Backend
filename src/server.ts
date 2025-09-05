@@ -5,15 +5,21 @@ import cors from "cors";
 import morgan from "morgan";
 import userRoutes from "./routes/userRoutes";
 import habitRoutes from "./routes/habitRoutes";
-
+import progressRouter from "./routes/progressRoutes";
+import aiRoutes from "./routes/ai-route";
 // Load environment variables
 dotenv.config();
+console.log(
+  "🔑 OpenAI API Key loaded?",
+  process.env.OPENAI_API_KEY ? "✅ Yes" : "❌ No"
+);
 
 // Initialize app
 const app: Application = express();
 
 // Middleware
 app.use(express.json());
+
 app.use(cors());
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
@@ -26,7 +32,14 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/api/users", userRoutes);
 app.use("/api/habits", habitRoutes);
-
+app.use("/api/progress", progressRouter);
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
+app.use("/api/ai", aiRoutes);
 // MongoDB Connection
 const connectDB = async () => {
   try {

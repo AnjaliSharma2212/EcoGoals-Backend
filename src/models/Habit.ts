@@ -1,5 +1,10 @@
 import mongoose, { Document, Schema, Types } from "mongoose";
 
+export interface IBadge {
+  title: string;
+  message: string;
+  dateAwarded?: Date;
+}
 export interface IHabit extends Document {
   _id: Types.ObjectId;
   user: Types.ObjectId;
@@ -10,6 +15,8 @@ export interface IHabit extends Document {
   color: string;
   createdAt?: Date;
   updatedAt?: Date;
+  badges: IBadge[];
+  level: "None" | "Bronze" | "Silver" | "Gold";
 }
 
 const habitSchema = new Schema<IHabit>(
@@ -25,7 +32,23 @@ const habitSchema = new Schema<IHabit>(
     completedDates: [{ type: Date }], // ✅ fixed typo
     streak: { type: Number, default: 0 },
     color: { type: String, default: "#22c55e" }, // Tailwind green-500 default
+    badges: {
+      type: [
+        {
+          title: String,
+          message: String,
+          dateAwarded: { type: Date, default: Date.now },
+        },
+      ],
+      default: [],
+    },
+    level: {
+      type: String,
+      enum: ["None", "Bronze", "Silver", "Gold"],
+      default: "None",
+    },
   },
+
   { timestamps: true }
 );
 

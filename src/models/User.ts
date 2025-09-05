@@ -7,6 +7,7 @@ export interface IUser extends Document {
   email: string;
   password: string;
   provider: "local" | "google" | "github";
+  bio?: string;
   avatarUrl?: string;
   createdAt: Date;
   matchPassword(enteredPassword: string): Promise<boolean>;
@@ -28,6 +29,7 @@ const userSchema = new Schema<IUser>(
       enum: ["local", "google", "github"],
       default: "local",
     },
+    bio: { type: String, default: "" },
     avatarUrl: { type: String },
     createdAt: Date,
   },

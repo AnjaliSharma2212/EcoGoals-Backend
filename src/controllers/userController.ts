@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import User from "../models/User";
 import generateToken from "../utils/generateToken";
 import { AuthRequest } from "../middleware/authMiddleware";
+
 export const registerUser = async (req: Request, res: Response) => {
   try {
     const { name, email, password, avatarUrl } = req.body;
@@ -11,13 +12,20 @@ export const registerUser = async (req: Request, res: Response) => {
     if (userExists) {
       return res.status(400).json({ message: "User already exists" });
     }
+    const cartoonAvatars = [
+      "https://api.dicebear.com/7.x/bottts/svg?seed=robot1",
+      "https://api.dicebear.com/7.x/bottts/svg?seed=robot2",
+      "https://api.dicebear.com/7.x/bottts/svg?seed=robot3",
+    ];
 
+    const randomAvatar =
+      cartoonAvatars[Math.floor(Math.random() * cartoonAvatars.length)];
     // Create new user
     const user = await User.create({
       name,
       email,
       password,
-      avatarUrl,
+      avatarUrl: avatarUrl || randomAvatar,
       provider: "local",
     });
 
@@ -83,4 +91,45 @@ export const getProfile = async (req: AuthRequest, res: Response) => {
     avatarUrl: req.user.avatarUrl,
     createdAt: req.user.createdAt,
   });
+};
+// @desc    Update user profile
+// @route   PUT /api/users/profile
+// @access  Private
+export const updateProfile = async (req: AuthRequest, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: "User not found" });
+    }
+
+    // Find the user
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Update fields (fallback to existing values if not provided)
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    user.avatarUrl = req.body.avatarUrl || user.avatarUrl;
+    if (req.body.password) {
+      user.password = req.body.password; // will be hashed in User model
+    }
+    if (req.body.bio) {
+      user.bio = req.body.bio;
+    }
+
+    const updatedUser = await user.save();
+
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      provider: updatedUser.provider,
+      avatarUrl: updatedUser.avatarUrl,
+      bio: updatedUser.bio,
+      token: generateToken(updatedUser._id.toString()), // issue new token if email/password changed
+    });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
 };

@@ -4,6 +4,8 @@ import {
   addHabit,
   updateHabit,
   deleteHabit,
+  getHabitById,
+  markHabitComplete,
 } from "../controllers/habitController";
 import { protect } from "../middleware/authMiddleware";
 
@@ -16,7 +18,8 @@ habitRoutes
 
 habitRoutes
   .route("/:id")
+  .get(protect, getHabitById)
   .put(protect, updateHabit) // PUT /api/habits/:id
   .delete(protect, deleteHabit); // DELETE /api/habits/:id
-
+habitRoutes.route("/:id/complete").post(protect, markHabitComplete);
 export default habitRoutes;
