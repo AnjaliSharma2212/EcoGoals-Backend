@@ -7,11 +7,14 @@ import userRoutes from "./routes/userRoutes";
 import habitRoutes from "./routes/habitRoutes";
 import progressRouter from "./routes/progressRoutes";
 import aiRoutes from "./routes/ai-route";
-// Load environment variables
+import quoteRoutes from "./routes/quotes";
+import taskRoutes from "./routes/taskRoute";
 dotenv.config();
+
+// ✅ Log API Key presence
 console.log(
-  "🔑 OpenAI API Key loaded?",
-  process.env.OPENAI_API_KEY ? "✅ Yes" : "❌ No"
+  "🔑 OpenAI Key?",
+  process.env.OPENAI_API_KEY ? "✅ Loaded" : "❌ Missing"
 );
 
 // Initialize app
@@ -19,8 +22,12 @@ const app: Application = express();
 
 // Middleware
 app.use(express.json());
-
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173", // frontend dev server
+    credentials: true,
+  })
+);
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
@@ -33,13 +40,9 @@ app.get("/", (req: Request, res: Response) => {
 app.use("/api/users", userRoutes);
 app.use("/api/habits", habitRoutes);
 app.use("/api/progress", progressRouter);
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    credentials: true,
-  })
-);
 app.use("/api/ai", aiRoutes);
+app.use("/api/quotes", quoteRoutes);
+app.use("/api/tasks", taskRoutes);
 // MongoDB Connection
 const connectDB = async () => {
   try {
@@ -55,8 +58,6 @@ const connectDB = async () => {
 const PORT = process.env.PORT || 5000;
 connectDB().then(() => {
   app.listen(PORT, () => {
-    console.log(
-      `🚀 Server running in ${process.env.NODE_ENV} mode on port ${PORT}`
-    );
+    console.log(`🚀 Server running on port ${PORT}`);
   });
 });
