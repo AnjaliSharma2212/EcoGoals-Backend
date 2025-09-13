@@ -10,7 +10,7 @@ import { protect } from "../middleware/authMiddleware";
 const userRoutes = express.Router();
 
 // Register
-userRoutes.post("/", registerUser);
+userRoutes.post("/register", registerUser);
 
 // Login
 userRoutes.post("/login", loginUser);
