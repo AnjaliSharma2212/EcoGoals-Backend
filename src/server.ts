@@ -24,7 +24,8 @@ const app: Application = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: "https://myecogoals-anjali.netlify.app/", // frontend dev server
+    origin: "https://myecogoals-anjali.netlify.app/",
+    methods: ["GET", "POST", "PUT", "DELETE"], // frontend dev server
     credentials: true,
   })
 );
