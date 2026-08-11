@@ -24,7 +24,10 @@ const app = (0, express_1.default)();
 // Middleware
 app.use(express_1.default.json());
 app.use((0, cors_1.default)({
-    origin: "https://myecogoals-anjali.netlify.app",
+    origin: [
+        "https://myecogoals-anjali.netlify.app",
+        "https://ecogoalshabits.vercel.app",
+    ],
     methods: ["GET", "POST", "PUT", "DELETE"], // frontend dev server
     credentials: true,
 }));

@@ -26,10 +26,13 @@ const app: Application = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: "https://myecogoals-anjali.netlify.app",
+    origin: [
+      "https://myecogoals-anjali.netlify.app",
+      "https://ecogoalshabits.vercel.app",
+    ],
     methods: ["GET", "POST", "PUT", "DELETE"], // frontend dev server
     credentials: true,
-  })
+  }),
 );
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
