@@ -8,7 +8,7 @@ const userController_1 = require("../controllers/userController");
 const authMiddleware_1 = require("../middleware/authMiddleware");
 const userRoutes = express_1.default.Router();
 // Register
-userRoutes.post("/", userController_1.registerUser);
+userRoutes.post("/register", userController_1.registerUser);
 // Login
 userRoutes.post("/login", userController_1.loginUser);
 // Profile (protected)

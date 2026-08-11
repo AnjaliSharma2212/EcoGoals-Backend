@@ -9,6 +9,8 @@ import progressRouter from "./routes/progressRoutes";
 import aiRoutes from "./routes/ai-route";
 import quoteRoutes from "./routes/quotes";
 import taskRoutes from "./routes/taskRoute";
+import dns from 'dns';
+dns.setServers(['8.8.8.8', '1.1.1.1']);
 dotenv.config();
 
 // ✅ Log API Key presence

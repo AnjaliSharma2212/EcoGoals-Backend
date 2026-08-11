@@ -14,6 +14,8 @@ const progressRoutes_1 = __importDefault(require("./routes/progressRoutes"));
 const ai_route_1 = __importDefault(require("./routes/ai-route"));
 const quotes_1 = __importDefault(require("./routes/quotes"));
 const taskRoute_1 = __importDefault(require("./routes/taskRoute"));
+const dns_1 = __importDefault(require("dns"));
+dns_1.default.setServers(['8.8.8.8', '1.1.1.1']);
 dotenv_1.default.config();
 // ✅ Log API Key presence
 console.log("🔑 OpenAI Key?", process.env.OPENAI_API_KEY ? "✅ Loaded" : "❌ Missing");
@@ -22,7 +24,8 @@ const app = (0, express_1.default)();
 // Middleware
 app.use(express_1.default.json());
 app.use((0, cors_1.default)({
-    origin: "http://localhost:5173", // frontend dev server
+    origin: "https://myecogoals-anjali.netlify.app",
+    methods: ["GET", "POST", "PUT", "DELETE"], // frontend dev server
     credentials: true,
 }));
 if (process.env.NODE_ENV === "development") {
